@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="fr" data-theme="light">
+<head>
+    <meta charset="UTF-8">
+    <title>Résultats - {{ classroom.name }}</title>
+    <!-- Tailwind CSS & DaisyUI via CDN -->
+    <link href="https://cdn.jsdelivr.net/npm/daisyui@4.12.10/dist/full.min.css" rel="stylesheet" type="text/css" />
+    <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
+</head>
+<body class="bg-base-200 min-h-screen p-6">
+    <div class="max-w-6xl mx-auto bg-base-100 shadow-xl rounded-box p-8">
+        
+        <div class="flex justify-between items-center mb-6">
+            <div>
+                <h1 class="text-3xl font-bold text-primary">Palmarès de la classe : {{ classroom.name }}</h1>
+                <p class="text-sm text-base-content/70">Période : {{ period.name }} | École : {{ classroom.school.name }}</p>
+            </div>
+            <a href="/admin/" class="btn btn-outline btn-sm">Retour Admin</a>
+        </div>
+
+        <div class="overflow-x-auto">
+            <table class="table table-zebra">
+                <thead>
+                    <tr>
+                        <th>Rang</th>
+                        <th>Matricule</th>
+                        <th>Nom & Prénom</th>
+                        <th>Total Obtenu</th>
+                        <th>Maximum</th>
+                        <th>Pourcentage</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for res in period_results %}
+                    <tr>
+                        <th class="font-bold text-lg">
+                            {% if res.rank == 1 %} 🥇
+                            {% elif res.rank == 2 %} 🥈
+                            {% elif res.rank == 3 %} 🥉
+                            {% endif %}
+                            {{ res.rank }}
+                        </th>
+                        <td>{{ res.student.matricule }}</td>
+                        <td class="font-semibold">{{ res.student.last_name }} {{ res.student.first_name }}</td>
+                        <td>{{ res.total_obtained }}</td>
+                        <td>{{ res.total_max }}</td>
+                        <td>
+                            <div class="badge badge-primary font-bold">{{ res.percentage }}%</div>
+                        </td>
+                    </tr>
+                    {% empty %}
+                    <tr>
+                        <td colspan="6" class="text-center py-4 text-gray-500">Aucun élève ou aucune note enregistrée pour cette classe et période.</td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+
+    </div>
+</body>
+</html>
